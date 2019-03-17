@@ -57,6 +57,7 @@ signed main()
 	  	  int u,v;
 	  	  cin>>u>>v;
 	  	  graph[u].emplace_back(v);
+		  graph[v].emplace_back(u);
 	  }
 	  bfs(v);
 }
