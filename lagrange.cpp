@@ -2,6 +2,7 @@
 using namespace std;
 #define int long long
 #define endl '\n'
+/*Contains the implementation of lagrange interpolation in a modular prime field*/
 const int mod=1000003;
 int inverse[mod];
 int add(int a,int b)
@@ -11,17 +12,17 @@ int add(int a,int b)
       a%=mod;
       return a;
 }
-int mul(int a,int b)
+int multiply(int a,int b)
 {
      return ((a%mod)*(b%mod))%mod;
 }
-int norm(int a)
+int normalise(int a)
 {
      if(a<0)
       a+=mod;
      return a;
 }
-void pre()
+void precompute()
 { 
     inverse[0]=inverse[1]=1; 
     for (int i = 2; i <mod; i++)  
@@ -29,20 +30,20 @@ void pre()
 } 
 int lagrangeInterpolation(vector<int> &y, int x)
 {
-    int ans = 0, curr = 1; 
+    int ans = 0, current = 1; 
     for(int i=1;i<=10 ;++i)
     {
-        curr = mul(curr, norm(x - i)); 
-        curr = mul(curr, inverse[norm(0 - i)]); 
+        current = multiply(current, normalise(x - i)); 
+        current = multiply(current, inverse[normalise(-i)]); 
     }
-    ans = add(ans, mul(curr, y[0])); 
+    ans = add(ans, multiply(current, y[0])); 
     for(int i=1;i<=10;++i)
     {
-        curr = mul(curr, norm(x - (i - 1))); 
-        curr = mul(curr, inverse[norm(x - i)]); 
-        curr = mul(curr, norm(i - 1 - 10)); 
-        curr = mul(curr, inverse[i]); 
-        ans = add(ans, mul(curr, y[i])); 
+        current = multiply(current, normalise(x - (i - 1))); 
+        current = multiply(current, inverse[normalise(x - i)]); 
+        current = multiply(current, normalise(i - 11)); 
+        current = multiply(current, inverse[i]); 
+        ans = add(ans, multiply(current, y[i])); 
     }
     return ans; 
 }
@@ -51,7 +52,7 @@ signed main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cout.tie(NULL); 
-    pre();
+    precompute();
     vector<int>y(11);
     y[0]=0;
     for(int i=0;i<=10;i++)
